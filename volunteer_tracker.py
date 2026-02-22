@@ -11,6 +11,16 @@ class Volunteer:
         self.name = name
         self.hours = hours
 
+    def initLoad():
+        global userList
+        try:
+            path = "data.pkl" #set this as whatever default path name
+            with open(path, 'rb') as file:
+                userList = pickle.load(file)
+            print("Save data found, loading data")
+        except:
+            print("No save data found")
+
     def load():
         global userList
         try:
@@ -24,6 +34,8 @@ class Volunteer:
     def save():
         try:
             path = input("Select a filename: ")
+            if(path == "" or path == " "):
+                path = "data.pkl"
             with open(path, 'wb') as file:
                 pickle.dump(userList, file)
             print("Data saved")
@@ -44,15 +56,32 @@ class Volunteer:
     def output():
         for i in range(len(userList)):
             print(f"Volunteer #{i}: " + str(userList[i].name) + f", {userList[i].hours} hours")
+    
+    def addHours():
+        user = int(input("Volunteer ID: "))
+        hours = int(input("Logged hours: "))
+        
+        try:
+            userList[user].hours += hours
+        except:
+            print("User not found")
 
+    def lookup():
+        username = input("Username ID to lookup: ")
+        for user in userList:
+            if(user.name == username):
+                print(username + "'s Volunteer ID is " + str(userList.index(user)))
+                return
+            else:
+                print("User not found")
 
 def clear():
     for i in range(100):
         print("\n")
 
 
-def main(): #sample command line interface for us to test
-
+def main():
+    Volunteer.initLoad()
     while True:
         option = input("Select Option: ")
         match option.lower():
@@ -68,6 +97,10 @@ def main(): #sample command line interface for us to test
                 Volunteer.load()
             case "save":
                 Volunteer.save()
+            case "log":
+                Volunteer.addHours()
+            case "lookup":
+                Volunteer.lookup()
             case _:
                 print("Invalid option")
 
