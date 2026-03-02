@@ -19,19 +19,17 @@ class Volunteer:
         except:
             print("No save data found")
 
-    def load():
+    def load(path):
         global userList
         try:
-            path = input("Provide a filename: ")
             with open(path, 'rb') as file:
                 userList = pickle.load(file)
             print("Save data found, loading data")
         except:
             print("No save data found")
 
-    def save():
+    def save(path):
         try:
-            path = input("Select a filename: ")
             if(path == "" or path == " "):
                 path = "data.pkl"
             with open(path, 'wb') as file:
@@ -41,13 +39,13 @@ class Volunteer:
             print("Save failed")
 
 
-    def createUser():
-        user = Volunteer(input("Username:"), 0)
+    def createUser(name):
+        user = Volunteer(name, 0)
         userList.append(user)
 
-    def deleteUser():
+    def deleteUser(user):
         try:
-            user = userList.remove(input("User to remove"))
+            user = userList.remove(user)
         except Exception:
             print("User not found")
 
@@ -55,17 +53,13 @@ class Volunteer:
         for i in range(len(userList)):
             print(f"Volunteer #{i}: " + str(userList[i].name) + f", {userList[i].hours} hours")
     
-    def addHours():
-        user = int(input("Volunteer ID: "))
-        hours = int(input("Logged hours: "))
-        
+    def addHours(user, hours):
         try:
             userList[user].hours += hours
         except:
             print("User not found")
 
-    def lookup():
-        username = input("Username ID to lookup: ")
+    def lookup(username):
         for user in userList:
             if(user.name == username):
                 print(username + "'s Volunteer ID is " + str(userList.index(user)))
