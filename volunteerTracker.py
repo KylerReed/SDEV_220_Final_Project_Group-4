@@ -28,7 +28,7 @@ class Volunteer:
         except:
             print("No save data found")
 
-    def save(path):
+    def save(path="data.pkl"):
         try:
             if(path == "" or path == " "):
                 path = "data.pkl"
@@ -53,11 +53,15 @@ class Volunteer:
         for i in range(len(userList)):
             print(f"Volunteer #{i}: " + str(userList[i].name) + f", {userList[i].hours} hours")
     
-    def addHours(user, hours):
+    def addHours(username, hours):
         try:
-            userList[user].hours += hours
+            for user in userList:
+                if user.name == username:
+                    user.hours += hours
+                    return("Hours added")
+            return("User not found")
         except:
-            print("User not found")
+            return("Error updating hours")
 
     def lookup(username):
         for user in userList:
@@ -112,5 +116,3 @@ def main():
                 Volunteer.exportVolunteerData()
             case _:
                 print("Invalid option")
-
-main()
