@@ -11,11 +11,6 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-@app.route("/")     # Home page to list all applicants
-def list_applicants():
-    applicants = Applicant.query.order_by(Applicant.applied_on.desc()).all()
-    return render_template("list_applicants.html", applicants=applicants)
-
 @app.route("/update/<int:id>", methods=["GET", "POST"])     # Update applicant status
 def update_applicant(id):
     applicant = Applicant.query.get_or_404(id)
@@ -26,11 +21,6 @@ def update_applicant(id):
         return redirect(url_for("list_applicants"))
 
     return render_template("update_applicant.html", applicant=applicant)
-
-@app.route("/applicants")       # Route to list all applicants
-def list_applicants():
-    applicants = Applicant.query.all()
-    return render_template("list_applicants.html", applicants=applicants)
 
 @app.route("/add", methods=["GET", "POST"])     # Route to add a new applicant
 def add_applicant():

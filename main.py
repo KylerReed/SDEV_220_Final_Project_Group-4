@@ -1,12 +1,30 @@
 import tkinter as tk
 from tkinter import messagebox
+import webbrowser
+import threading
+import time
+import os
+import sys
 from volunteerTracker import Volunteer
 
+# Add applicant_tracker to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'applicant_tracker'))
+from applicant_tracker.app import app as flask_app
+
 Volunteer.initLoad()
+
+def run_flask():
+    """Run Flask in a background thread"""
+    flask_app.run(debug=False, use_reloader=False, port=5000, threaded=True)
 
 def mainGui():
     root = tk.Tk()
     root.title("Volunteer & Applicant Management System")
+    
+    # Start Flask in background thread when app launches
+    flask_thread = threading.Thread(target=run_flask, daemon=True)
+    flask_thread.start()
+    time.sleep(2)  # Wait for Flask to start
 
     main_frame = tk.Frame(root, padx=10, pady=10)
     main_frame.pack(fill=tk.BOTH, expand=True)
@@ -56,19 +74,13 @@ def mainGui():
     volunteer_btn.pack(pady=10)
 
     def open_applicant_management():
-        applicant_window = tk.Toplevel(root)
-        applicant_window.title("Applicant Management")
-        
-        applicant_frame = tk.Frame(applicant_window, padx=10, pady=10)
-        applicant_frame.pack(fill=tk.BOTH, expand=True)
-        
-        tk.Label(applicant_frame, text="Applicant Management", font=("Arial", 14, "bold")).pack()
-        
-        tk.Label(applicant_frame, text="placeholder").pack(pady=20)
+        """Open Flask applicant tracker in default web browser"""
+        webbrowser.open("http://localhost:5000")
 
     admin_btn = tk.Button(main_frame, text="Admin Login", command=open_applicant_management, width=20, height=3)
     admin_btn.pack(pady=10)
 
     root.mainloop()
 
-mainGui()
+if __name__ == "__main__":
+    mainGui()
