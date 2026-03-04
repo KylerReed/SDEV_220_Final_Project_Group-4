@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-card">
+    <h2 class="mb-4">Applicant Details</h2>
+
+    <form method="POST">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">First Name</label>
+                <input type="text" name="first_name" class="form-control" value="{{ applicant.first_name if applicant else '' }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Last Name</label>
+                <input type="text" name="last_name" class="form-control" value="{{ applicant.last_name if applicant else '' }}" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" value="{{ applicant.email if applicant else '' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input type="text" name="phone" class="form-control" value="{{ applicant.phone if applicant else '' }}">
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label">Applied Date</label>
+            <input type="date" name="applied_date" class="form-control" value="{{ applicant.applied_date if applicant else '' }}">
+        </div>
+
+        <button type="submit" class="btn btn-success me-2">Save</button>
+        <a href="{{ url_for('list_applicants') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

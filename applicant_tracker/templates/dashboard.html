@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-card">
+    <h2 class="mb-4">Dashboard</h2>
+
+    <div class="row g-4">
+
+        <!-- Total Applicants -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-uppercase text-muted">Total Applicants</h5>
+                    <h2 class="display-6">{{ total_applicants }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recently Added -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-uppercase text-muted">Recent Applicants</h5>
+                    <h2 class="display-6">{{ recent_count }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-uppercase text-muted">Quick Actions</h5>
+                    <a href="{{ url_for('add_applicant') }}" class="btn btn-primary w-100 mb-2">Add Applicant</a>
+                    <a href="{{ url_for('list_applicants') }}" class="btn btn-secondary w-100">View Applicants</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Recent Applicants Table -->
+    <div class="mt-5">
+        <h4 class="mb-3">Most Recent Applicants</h4>
+        <table class="table table-hover table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Applied</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for applicant in recent_applicants %}
+                <tr>
+                    <td>{{ applicant.first_name }} {{ applicant.last_name }}</td>
+                    <td>{{ applicant.email }}</td>
+                    <td>{{ applicant.applied_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}
