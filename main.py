@@ -16,6 +16,12 @@ def run_flask():
     """Run Flask in a background thread"""
     flask_app.run(debug=False, use_reloader=False, port=5000, threaded=True)
 
+#Gui Sections:
+# Main displays the main window & 4 buttons
+# Volunteer hours takes input for hours and a name which then updates the values for each volunteer
+# Applicant management links to a database and webpage locally hosted to modify the applicants in the database
+# Volunteer Management allows for users to be created, deleted, and have their hours modified
+# Modify checks for admin password before then allowing the modifications previously described in the volunteer management screen
 def mainGui():
     root = tk.Tk()
     root.title("Volunteer & Applicant Management System")
@@ -140,6 +146,7 @@ def mainGui():
                     button_frame = tk.Frame(modify_frame)
                     button_frame.pack(pady=10)
 
+                    #Also, all these results should be printed to the terminal as well
                     def addHours():
                         hours = hours_change.get()
                         name = name_entry.get()
