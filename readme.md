@@ -27,7 +27,7 @@ The main purpose of the System is to track volunteer hours and create an event s
    ```bash
    python -m venv .venv
    source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
-   pip install Flask Flask-SQLAlchemy
+   pip install -r requirements.txt
    ```
 
 3. **Running the Application:**
