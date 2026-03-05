@@ -4,12 +4,13 @@ import csv
 userList = []
 
 class Volunteer:
-    
+
+    # The class volunteer makes an object with can store the name and hours of a volunteer
     def __init__(self, name, hours):
         self.name = name
         self.hours = hours
 
-    def initLoad():
+    def initLoad(): #First load just uses the default path, its data.pkl right now
         global userList
         try:
             path = "data.pkl" #set this as whatever default path name
@@ -19,7 +20,7 @@ class Volunteer:
         except:
             print("No save data found")
 
-    def load(path):
+    def load(path): #Names should be (mostly) self explanatory
         global userList
         try:
             with open(path, 'rb') as file:
@@ -76,6 +77,7 @@ class Volunteer:
         except:
             return("Error updating hours")
 
+    #Not actually used
     def lookup(username):
         for user in userList:
             if(user.name == username):
@@ -83,7 +85,8 @@ class Volunteer:
                 return
             else:
                 print("User not found")
-    
+
+    # Saves to a csv file which can be found in the explorer and moved anywhere else for future use
     def exportVolunteerData():
         exportPath = 'data.csv'
         with open(exportPath, 'w', newline='') as csvFile:
@@ -103,7 +106,7 @@ def clear():
     for i in range(100):
         print("\n")
 
-
+#Also not actually used, for testing only
 def main():
     Volunteer.initLoad()
     while True:
