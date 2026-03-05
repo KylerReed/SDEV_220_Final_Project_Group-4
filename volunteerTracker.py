@@ -40,21 +40,34 @@ class Volunteer:
 
 
     def createUser(name):
-        user = Volunteer(name, 0)
-        userList.append(user)
-
-    def deleteUser(user):
         try:
-            user = userList.remove(user)
+            user = Volunteer(name, 0)
+            userList.append(user)
         except Exception:
+            print("Error creating user")
+
+    def deleteUser(username):
+        try:
+            for user in userList:
+                if user.name == username:
+                    userList.remove(user)
+                    print(f"User {username} deleted")
+                    return
             print("User not found")
+        except Exception:
+            print("Error deleting user")
 
     def output():
         for i in range(len(userList)):
             print(f"Volunteer #{i}: " + str(userList[i].name) + f", {userList[i].hours} hours")
+
+    def output_list():
+        return(userList)
     
     def addHours(username, hours):
         try:
+            if(hours < 0):
+                return("Error updating hours")
             for user in userList:
                 if user.name == username:
                     user.hours += hours
