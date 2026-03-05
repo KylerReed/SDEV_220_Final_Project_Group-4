@@ -9,7 +9,7 @@ class MonthlyReport(ReportGenerator):
         self.year = year
 
     def generate_report(self, export=False):
-        """Generates a report string and optionally exports to CSV."""
+        """Generates a report string and optionally exports it to a text file."""
         applicants = self.get_all_applicants()
         
         # Filter applicants by month/year (assuming applied_on is accessible)
