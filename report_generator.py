@@ -1,7 +1,6 @@
 import os
 import sys
 import pickle
-from datetime import datetime
 
 # Setup paths to import models correctly
 current_dir = os.path.dirname(os.path.abspath(__file__))
