@@ -20,11 +20,11 @@ class ReportGenerator:
     def __init__(self, organization_name="Leadership Lafayette"):
         self.organization_name = organization_name
         self.app = app
+        self.volunteers = []
         self._load_volunteer_data()
 
     def _load_volunteer_data(self):
         """Loads volunteer data from the serialized list in data.pkl"""
-        self.volunteers = []
         data_path = os.path.join(os.path.dirname(__file__), "data.pkl")
         if os.path.exists(data_path):
             try:
