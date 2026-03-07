@@ -1,52 +1,49 @@
-from datetime import datetime
-from volunteerTracker import Volunteer
+from report_generator import ReportGenerator
 
-class AnnualReport:
-  """ Generates an annual recap of volunteer activity """
+class AnnualReport(ReportGenerator):
+    """Generates a summary report for a specific year."""
+    def __init__(self, year: int, organization_name="Leadership Lafayette"):
+        super().__init__(organization_name)
+        self.year = year
 
-  @staticmethod
-  def generate(year: int):
-    volunteers = Volunteer.getAllVolunteers()
+    def generate_report(self, export=False):
+        """Generates an annual report string and optionally exports to txt."""
+        applicants = self.get_all_applicants()
+        
+        # Filter applicants by year
+        annual_applicants = [
+            a for a in applicants 
+            if a.applied_on and a.applied_on.year == self.year
+        ]
 
-    report = {
-      "year": year,
-      "total_hours": 0,
-      "volunteer_count": 0,
-      "details": []
-    }
+        total_applied = len(annual_applicants)
+        accepted = len([a for a in annual_applicants if a.status == 'Accepted' or a.status == 'Approved'])
+        declined = len([a for a in annual_applicants if a.status == 'Declined'])
+        waitlisted = len([a for a in annual_applicants if a.status == 'Waitlisted'])
+        
+        acceptance_rate = (accepted / total_applied * 100) if total_applied > 0 else 0
+        total_hours = self.get_total_volunteer_hours()
 
-  for volunteer in volunteers:
-    yearly_hours = 0
+        report_str = f"=== {self.organization_name} Annual Report ===\n"
+        report_str += f"Reporting Year: {self.year}\n"
+        report_str += f"Total Applicants: {total_applied}\n"
+        report_str += f"  - Accepted: {accepted}\n"
+        report_str += f"  - Declined: {declined}\n"
+        report_str += f"  - Waitlisted: {waitlisted}\n"
+        report_str += f"Acceptance Rate: {acceptance_rate:.1f}%\n"
+        report_str += f"Total Volunteer Hours Logged: {total_hours}\n"
+        report_str += "==============================================="
 
-    for record in volunteer.hours:
-      date = datetime.strptime(record["date"], "%Y-%m-%d")
+        if export:
+            filename = f"annual_report_{self.year}.txt"
+            with open(filename, 'w') as f:
+                f.write(report_str)
+            print(f"Report exported to {filename}")
 
-      if date.year == year:
-        yearly_hours += record["hours"]
-
-    if yearly_hours > 0:
-      report["volunteer_count"] += 1
-      report["total_hours"] += yearly_hours
-
-      report["details"].append({
-        "name": volunteer.name,
-        "hours": yearly.hours
-      })
-  return report
+        return report_str
 
 if __name__ == "__main__":
-  year = int(input("Enter year: "))
-
-  report = AnnualReport.generate(year)
-
-  print("\nAnnual Volunteer Report")
-  print("----------------------")
-  print(f"Year: {report["year"]}")
-  print(f"Total Volunteers: {report["volunteer_count"]}")
-  print(f"Total Hours: {report["total_hours"]}\n")
-
-  for v in report["details"]:
-    print(f"{v["name"]} - {v["hours"]} hours")
-
-
-
+    from datetime import datetime
+    now = datetime.now()
+    report = AnnualReport(now.year)
+    print(report.generate_report())

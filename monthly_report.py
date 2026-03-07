@@ -1,54 +1,46 @@
+from report_generator import ReportGenerator
 from datetime import datetime
-from volunteerTracker import Volunteer
 
-class MonthlyReport:
-  """ Generates a volunteer report for a requested month. """
+class MonthlyReport(ReportGenerator):
+    """Generates a summary report for a specific month and year."""
+    def __init__(self, month: int, year: int, organization_name="Leadership Lafayette"):
+        super().__init__(organization_name)
+        self.month = month
+        self.year = year
 
-  @staticmethod
-  def generate(month: int, year: int)
-    volunteers = Volunteer.getAllVolunteers()
+    def generate_report(self, export=False):
+        """Generates a report string and optionally exports it to a text file."""
+        applicants = self.get_all_applicants()
+        
+        # Filter applicants by month/year (assuming applied_on is accessible)
+        monthly_applicants = [
+            a for a in applicants 
+            if a.applied_on and a.applied_on.month == self.month and a.applied_on.year == self.year
+        ]
 
-    report = {
-      "month": month,
-      "year": year,
-      "total_hours": 0,
-      "volunteer_count": 0,
-      "details": []
-    }
+        total_applied = len(monthly_applicants)
+        accepted = len([a for a in monthly_applicants if a.status == 'Accepted' or a.status == 'Approved'])
+        
+        # We can't track *monthly* hours easily from volunteerTracker since it just tracks total hours, 
+        # so we will report on the *current total* hours as of this month.
+        total_hours = self.get_total_volunteer_hours()
 
-    for volunteer in volunteers:
-      monthly_hours = 0
+        report_str = f"--- {self.organization_name} Monthly Report ---\n"
+        report_str += f"Reporting Period: {self.month}/{self.year}\n"
+        report_str += f"Total New Applicants: {total_applied}\n"
+        report_str += f"Applicants Accepted: {accepted}\n"
+        report_str += f"Total Volunteer Hours Logged to Date: {total_hours}\n"
+        report_str += "----------------------------------------------"
 
-       for record in volunteer.hours:
-          date = datetime.strptime(record["date"], "%Y-%m-%d")
+        if export:
+            filename = f"monthly_report_{self.month}_{self.year}.txt"
+            with open(filename, 'w') as f:
+                f.write(report_str)
+            print(f"Report exported to {filename}")
 
-          if date.month == month and date.year == year:
-            monthly_hours += record["hours"]
-
-        if monthly_hours > 0:
-          report["volunteer_count"] += 1
-          report["total_hours] += monthly_hours
-
-          report["details"].append({
-            "name": volunteer.name,
-            "hours": monthly_hours
-          })
-
-      return report
+        return report_str
 
 if __name__ == "__main__":
-  month = int(input("Enter month (1-12): "))
-  year = int(input("Enter year: "))
-
-  report = MonthlyReport.generate(month, year)
-
-  print("\nMonthly Volunteer Report")
-  print("-------------------------")
-  print(f"Month: {report["month"]} Year: {report["year"]}")
-  print(f"Total Volunteers: {report["total_hours"]}")
-  print(f"Total Hours: {report["total_hours"]}\n")
-
-  for v in report["details"]:
-    print(f"{v["name"]} - {v["hours"]} hours")
-    
-
+    now = datetime.now()
+    report = MonthlyReport(now.month, now.year)
+    print(report.generate_report())
